@@ -1,0 +1,165 @@
+import matplotlib.pyplot as plt
+import seaborn as sns
+import pandas as pd
+
+
+
+Dataset = pd.read_csv(r"File pass")
+
+
+import numpy as np
+import matplotlib.pyplot as plt
+ 
+plt.rcParams["font.family"] = "Times New Roman"
+plt.rcParams['savefig.dpi'] = 500
+
+# ================================  First ================================
+
+plt.subplot(1, 3, 1)  
+
+
+
+def addlabels(x,y):
+    for i in range(len(x)):
+        plt.text(i, y[i], y[i], ha = 'center', fontsize=20,
+                 bbox = dict(facecolor = 'white', alpha =.8))
+ 
+if __name__ == '__main__':
+    R2 = {'LASSO':0, 'KNN':0.84, 'GBR':0.85,
+        'RFR':0.77}
+
+
+    courses = list(R2.keys())
+    values = list(R2.values())
+      
+     
+    # creating the bar plot
+    plt.bar(courses, values, color ='aquamarine',
+            width = 0.4)
+    plt.rcParams["font.family"] = "Times New Roman"
+    
+    plt.ylim(0,1)
+    
+    plt.tick_params(axis="y", labelsize=25)
+    plt.tick_params(axis="x", rotation=45,labelsize=25)
+    
+    
+    plt.title('R2 (%)',fontsize=35)
+    plt.grid(axis='y',color = 'gray', linestyle = '--', linewidth = 0.5) 
+
+    # calling the function to add value labels
+    addlabels(courses, values)
+
+     
+    # visualizing the plot
+    plt.show()
+
+
+# ================================  Midel ================================
+plt.subplot(1, 3, 2)
+
+
+def addlabels(x,y):
+    for i in range(len(x)):
+        plt.text(i, y[i], y[i], ha = 'center', fontsize=20,
+                 bbox = dict(facecolor = 'white', alpha =.8))
+ 
+if __name__ == '__main__':
+    RMSE = {'LASSO':1.74, 'KNN':0.67, 'GBR':0.67,
+        'RFR':0.82}
+
+
+    courses1 = list(RMSE.keys())
+    values1 = list(RMSE.values())
+      
+     
+    # creating the bar plot
+    plt.bar(courses1, values1, color ='lightseagreen',
+            width = 0.4)
+    
+    plt.rcParams["font.family"] = "Times New Roman"
+    
+    plt.ylim(0,1.8)
+    
+    plt.tick_params(axis="y", labelsize=25)
+    plt.tick_params(axis="x", rotation=45,labelsize=25)
+    
+    
+    plt.title('RMSE (mm)',fontsize=35)
+    plt.grid(axis='y',color = 'gray', linestyle = '--', linewidth = 0.5) 
+
+
+    # calling the function to add value labels
+    addlabels(courses1, values1)
+
+     
+    # visualizing the plot
+    plt.show()
+
+
+
+
+# ================================  Last ================================
+
+plt.subplot(1, 3, 3)
+
+def addlabels(x,y):
+    for i in range(len(x)):
+        plt.text(i, y[i], y[i], ha = 'center', fontsize=20,
+                 bbox = dict(facecolor = 'white',alpha =.8))
+ 
+if __name__ == '__main__':
+    MAE = {'LASSO':1.03, 'KNN':0.47, 'GBR':0.48,
+            'RFR':0.61}
+    
+    
+    courses2 = list(MAE.keys())
+    values2 = list(MAE.values())
+      
+     
+    # creating the bar plot
+    plt.bar(courses2, values2, color ='deepskyblue',
+            width = 0.4)
+    
+    plt.rcParams["font.family"] = "Times New Roman"
+    
+    plt.ylim(0,1.8)
+    
+    plt.tick_params(axis="y", labelsize=25)
+    plt.tick_params(axis="x", rotation=45,labelsize=25)
+    
+    plt.title('MAE (mm)',fontsize=35)
+    plt.grid(axis='y',color = 'gray', linestyle = '--', linewidth = 0.5) 
+
+
+
+    # calling the function to add value labels
+    addlabels(courses2, values2)
+
+     
+    # visualizing the plot
+    plt.show()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

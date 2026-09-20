@@ -1,0 +1,147 @@
+
+
+Feature Importnace Issue
+"""
+# -------------------- Library  --------------------
+
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import Lasso
+from sklearn.ensemble import GradientBoostingRegressor
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.neighbors import KNeighborsRegressor
+from sklearn import metrics
+import numpy as np
+
+# -------------------- Import data  --------------------
+
+# define dataset
+Data = pd.read_csv(r"File pass")
+
+# Seperate datasetset
+
+# -------------------- depend and indipend data  --------------------
+
+
+X = Data.drop(['FID', 'FID_Points', 'FID_Mian_F', 'FID_1', 'vel', 'coh', 'std',
+       'LatUTM', 'LongUTM'],axis=1)
+y = Data['vel']
+
+# Accuracy List
+R2_Lasso = []
+RMSE_Lasso = []
+MAE_Lasso = []
+
+R2_KNN = []
+RMSE_KNN = []
+MAE_KNN = []
+
+R2_Gradient = []
+RMSE_Gradient = []
+MAE_Gradient = []
+
+R2_RFR = []
+RMSE_RFR = []
+MAE_RFR = []
+
+# Define Models
+
+for i in range(1,10):
+
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3,shuffle = True)
+    
+    
+    print(y_test.head())
+
+# -------------------- Lasso  --------------------
+    Lasso_model = Lasso(alpha=1.0)
+    
+    # Fit the model to the data
+    Lasso_model.fit(X_train, y_train)
+    
+    Lasso_pred = Lasso_model.predict(X_test)
+
+    RMSE_Las = ('{:.2f}'.format(np.sqrt(metrics.mean_squared_error(y_test,Lasso_pred))))
+    
+    RMSE_Lasso.append(RMSE_Las)
+
+    MAE_Las = ('{:.2f}'.format(metrics.mean_absolute_error(y_test,Lasso_pred)))
+    
+    MAE_Lasso.append(MAE_Las)
+    
+    R2_Las = ('{:.2f}'.format(metrics.r2_score(y_test,Lasso_pred)*100))
+
+    R2_Lasso.append(R2_Las)
+    
+    print('LASSO')
+# -------------------- Gradiant  --------------------
+
+    # Create gradient boosting regression model
+    Gradiant_model = GradientBoostingRegressor(n_estimators=300, max_depth=7)
+    
+    # Fit the model on the training data
+    Gradiant_model.fit(X_train, y_train)
+    Gradiant_pred = Gradiant_model.predict(X_test)
+
+    RMSE_G = ('{:.2f}'.format(np.sqrt(metrics.mean_squared_error(y_test,Gradiant_pred))))
+    
+    RMSE_Gradient.append(RMSE_G)
+
+    MAE_G = ('{:.2f}'.format(metrics.mean_absolute_error(y_test,Gradiant_pred)))
+    
+    MAE_Gradient.append(MAE_G)
+    
+    R2_G = ('{:.2f}'.format(metrics.r2_score(y_test,Gradiant_pred)*100))
+
+    R2_Gradient.append(R2_G)
+    
+    print('Grad')
+# -------------------- RFR  --------------------
+
+
+    # define the model
+    Random_model = RandomForestRegressor(n_estimators=300, max_depth=8)
+    # fit the model
+    Random_model.fit(X_train, y_train)
+    Random_pred = Random_model.predict(X_test)
+
+    RMSE_R = ('{:.2f}'.format(np.sqrt(metrics.mean_squared_error(y_test,Random_pred))))
+    
+    RMSE_RFR.append(RMSE_R)
+
+    MAE_R = ('{:.2f}'.format(metrics.mean_absolute_error(y_test,Random_pred)))
+    
+    MAE_RFR.append(MAE_R)
+    
+    R2_R = ('{:.2f}'.format(metrics.r2_score(y_test,Random_pred)*100))
+
+    R2_RFR.append(R2_R)
+
+    print('RFR')
+# -------------------- K Neighbors  --------------------
+    
+    KNN_model = KNeighborsRegressor(n_neighbors=8)
+    # fit the model
+    KNN_model.fit(X_train, y_train)
+    # perform permutation importance
+    KNN_pred = KNN_model.predict(X_test)
+
+    RMSE_K = ('{:.2f}'.format(np.sqrt(metrics.mean_squared_error(y_test,KNN_pred))))
+    
+    RMSE_KNN.append(RMSE_K)
+
+    MAE_K = ('{:.2f}'.format(metrics.mean_absolute_error(y_test,KNN_pred)))
+    
+    MAE_KNN.append(MAE_K)
+    
+    R2_K = ('{:.2f}'.format(metrics.r2_score(y_test,KNN_pred)*100))
+
+    R2_KNN.append(R2_K)
+    
+    print('KNN')
+    
+    
+    print('Stage: ', i)
+    
+    
+    

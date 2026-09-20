@@ -1,0 +1,25 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+
+plt.rcParams['savefig.dpi'] = 500
+plt.rcParams["font.family"] = "Times New Roman"
+
+
+data = pd.read_csv(r"File pass")
+
+plt.hist(data['vel'],bins=100,color='lightseagreen',edgecolor='white', linewidth=0.5,label='Data')
+
+plt.grid(linestyle='--')
+plt.tick_params(axis="y", labelsize=25)
+plt.tick_params(axis="x", labelsize=25)
+plt.axvline(x = -1.61, color = 'red', label = 'Mean',linestyle='--',linewidth=2)
+plt.axvline(x = 1.74, color = 'gold', label = 'std',linestyle='--',linewidth=2)
+plt.ylabel('Frequency',fontsize=30)
+plt.xlabel('Displacement rate (mm/year)',fontsize=30)
+
+plt.legend(loc ="upper left",fontsize="xx-large",shadow=True)
+
+
+import numpy as np
+print(np.mean(data['vel']))
+print(np.std(data['vel']))
