@@ -1,0 +1,27 @@
+import pandas as pd
+import numpy as np
+
+# Read the CSV file
+df = pd.read_csv(r"UD-BB'.csv")
+
+# Create empty lists
+within_range = []
+outside_range = []
+nan_values = []
+
+# Loop through each row in the dataframe
+for index, row in df.iterrows():
+    # Check if the value is NaN
+    if np.isnan(row['Diff SVR']):
+        nan_values.append(row['Diff SVR'])
+    # Check if the value is within range
+    elif -3 <= row['Diff SVR'] <= 3:
+        within_range.append(row['Diff SVR'])
+    # Otherwise, it's outside the range
+    else:
+        outside_range.append(row['Diff SVR'])
+
+# Print the lists
+print("Values within range:", within_range)
+print("Values outside range:", outside_range)
+print("NaN values:", nan_values)

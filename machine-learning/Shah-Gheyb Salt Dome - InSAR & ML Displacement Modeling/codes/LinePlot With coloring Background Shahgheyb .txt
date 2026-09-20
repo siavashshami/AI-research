@@ -1,0 +1,76 @@
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.patches as mpatches 
+
+
+# Read the CSV file
+df = pd.read_csv(r"EW-AA'.csv")
+
+# Create a new figure and axis
+plt.rcParams["font.family"] = "Times New Roman"
+plt.rcParams['savefig.dpi'] = 500
+#fig, ax = plt.subplots(2,1,hspace=0)
+fig = plt.figure()
+gs = fig.add_gridspec(2, hspace=0)
+ax = gs.subplots(sharex=True, sharey=True)
+# Loop through all the values and set the background color for each point
+for i, value in enumerate(df["Diff RFR"]):
+    if not np.isnan(value):
+        if -3 <= value <= 3:
+            ax[0].axvspan(i-0.5, i+0.5, facecolor='greenyellow', alpha=0.2)
+        else:
+            ax[0].axvspan(i-0.5, i+0.5, facecolor='red', alpha=0.2)
+
+
+for i, value in enumerate(df["Diff SVR"]):
+    if not np.isnan(value):
+        if -3 <= value <= 3:
+            ax[1].axvspan(i-0.5, i+0.5, facecolor='greenyellow', alpha=0.2)
+        else:
+            ax[1].axvspan(i-0.5, i+0.5, facecolor='red', alpha=0.2)
+# Plot the data
+
+ax[0].plot(df.index, df["Diff RFR"],color='black',label='InSAR - RFR (EW)')
+ax[1].plot(df.index, df["Diff SVR"],color='black',label='InSAR - SVR (EW)')
+
+ax[0].set_ylim(-50,50)
+ax[1].set_ylim(-50,50)
+
+ax[0].axhline(y = 0, color = 'gray', linestyle = '--') 
+ax[1].axhline(y = 0, color = 'gray', linestyle = '--') 
+
+ax[0].set_xticks(df.index[::len(df.index)//5], labels=df['Dist km'][::len(df.index)//5]) 
+# Show the plot
+ax[0].text(21, -45, ' i ', color='black', fontsize=25,
+        bbox=dict(facecolor='white', edgecolor='black', boxstyle='round'))
+ax[0].text(43, -45, " i' ", color='black', fontsize=25,
+        bbox=dict(facecolor='white', edgecolor='black', boxstyle='round'))
+
+
+ax[1].text(21, -45, ' i ', color='black', fontsize=25,
+        bbox=dict(facecolor='white', edgecolor='black', boxstyle='round'))
+ax[1].text(43, -45, " i' ", color='black', fontsize=25,
+        bbox=dict(facecolor='white', edgecolor='black', boxstyle='round'))
+
+ax[0].axvline(x = 22, color = 'black', linestyle='--')
+ax[0].axvline(x = 44, color = 'black', linestyle='--')
+ax[1].axvline(x = 22, color = 'black', linestyle='--')
+ax[1].axvline(x = 44, color = 'black', linestyle='--')
+
+plt.tick_params(axis="x", labelsize=25)
+ax[0].tick_params(axis='y', labelsize=25)
+ax[1].tick_params(axis='y', labelsize=25)
+
+
+
+ax[0].legend(loc=1,fontsize=25,shadow=True, fancybox=True)
+ax[1].legend(loc=4,fontsize=25,shadow=True, fancybox=True)
+
+
+#plt.ylabel('Displacement [mm]',fontsize=25)
+#plt.xlabel("Distance A to A' [km]",fontsize=25)
+
+plt.show()
+

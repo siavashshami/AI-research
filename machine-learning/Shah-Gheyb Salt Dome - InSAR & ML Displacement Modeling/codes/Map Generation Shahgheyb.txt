@@ -1,0 +1,71 @@
+import numpy as np
+from osgeo import gdal
+import matplotlib.pyplot as plt
+import pandas as pd
+from sklearn.ensemble import RandomForestRegressor
+#from sklearn.svm import SVR
+
+# Import Dataset (2016)
+Data = pd.read_csv(r"EW2016Domecsv.csv")
+
+# Seperate datasetset
+
+X = Data.drop(['FID', 'FID_EW2016', 'FID_EWClip', 'pointid', 'Vel', 'NDWI',
+               'LST', 'Fault', 'Aquifer',
+       'River', 'PRC', 'Earthquake', 'Hole', 'Lithology'],axis=1)
+y = Data['Vel']
+
+RFR_model = RandomForestRegressor(n_estimators=100)
+
+# Fit the model to the data
+RFR_model.fit(X, y)
+  
+#NOTICE Some Layers are Dependable to Time add them
+  
+DEM1 = r"DEM.tif"
+Slope1 =r"slope1.tif"
+Aspect1 = r"aspect1.tif"
+Curvature1 = r"curveture1.tif"
+TWI1 = r"TWI.tif"
+
+DEM = gdal.Open(DEM1, gdal.GA_ReadOnly)
+DEM2 = DEM.GetRasterBand(1)
+DEMArray = DEM2.ReadAsArray()    
+
+Slope = gdal.Open(Slope1, gdal.GA_ReadOnly)
+Slope2 = Slope.GetRasterBand(1)
+SlopeArray = Slope2.ReadAsArray()    
+
+Aspect = gdal.Open(Aspect1, gdal.GA_ReadOnly)
+Aspect2 = Aspect.GetRasterBand(1)
+AspectArray = Aspect2.ReadAsArray()    
+
+
+Curvature = gdal.Open(Curvature1, gdal.GA_ReadOnly)
+Curvature2 = Curvature.GetRasterBand(1)
+CurvatureArray = Curvature2.ReadAsArray()    
+
+TWI = gdal.Open(TWI1, gdal.GA_ReadOnly)
+TWI2 = TWI.GetRasterBand(1)
+TWIArray = TWI2.ReadAsArray()    
+
+st = np.stack([DEMArray,SlopeArray,AspectArray,CurvatureArray,TWIArray],axis=2)
+con = np.concatenate(st,axis=0)
+
+
+predictions =RFR_model.predict(con)
+NB= np.reshape(predictions,(163,181))
+
+
+plt.imshow(DEMArray,cmap='jet')
+
+import rasterio
+
+file_name = "RFR_EW_Senario15_Topo_Map.tif"
+
+DEMUTM = rasterio.open(r"DEM.tif")
+
+with rasterio.open(file_name, 'w',  driver='GTiff',  height=NB.shape[0],  
+                   width=NB.shape[1], count=1, dtype=NB.dtype, transform = DEMUTM.transform,  
+                   crs=DEMUTM.crs) as new_dataset:
+    new_dataset.write(NB.astype(NB.dtype), 1)

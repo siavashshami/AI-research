@@ -1,0 +1,55 @@
+import matplotlib
+import matplotlib.pyplot as plt
+import numpy as np
+plt.rcParams["font.weight"] = "bold"
+plt.rcParams["axes.labelweight"] = "bold"
+plt.rcParams['savefig.dpi'] = 500
+
+labels = ['Senario 1','Senario 2','Senario 3','Senario 4','Senario 5','Senario 6','Senario 7','Senario 8','Senario 9'
+                          ,'Senario 10','Senario 11','Senario 12','Senario 13','Senario 14','Senario 15','Senario 16','Senario 17','Senario 18'
+                          ,'Senario 19','Senario 20','Senario 21','Senario 22','Senario 23','Senario 24','Senario 25','Senario 26','Senario 27'
+                          ,'Senario 28','Senario 29']
+RMSE_RFR = [3.8,3.8,2.9,3.8,3.9,9.3,9.1,5.0,6.3,9.9,6.7,6.9,9.4,7.9,1.9,7.1,9.1,11.0,2.6,8.5,5.3,8.6,9.4,6.4,8.3,4.7,6.2,6.4,5.8]
+RMSE_SVR = [7.6,7.8,6.1,7.9,7.9,7.6,7.4,6.3,6.5,8.2,7.7,7.5,8.6,7.9,6.3,7.7,8.7,5.6,6.4,8.4,5.7,8.7,5.8,8.9,8.4,5.8,8.1,8.4,7.9]
+
+x = np.arange(len(labels))  # the label locations
+width = 0.45  # the width of the bars
+
+fig, ax = plt.subplots(figsize=(65,15))
+rects1 = ax.bar(x - width/2, RMSE_RFR, width, label='RFR',color='royalblue',edgecolor = "black")
+rects2 = ax.bar(x + width/2, RMSE_SVR, width, label='SVR',color='greenyellow',edgecolor = "black")
+
+# Add some text for labels, title and custom x-axis tick labels, etc.
+ax.set_ylabel('RMSE',fontsize=45)
+ax.set_xticks(x)
+ax.set_xticklabels(labels)
+#ax.legend()
+ax.tick_params(axis="x", labelsize=45,rotation=90)
+ax.tick_params(axis='y', rotation=0, labelsize=45,pad=30)
+
+
+def autolabel(rects):
+    """Attach a text label above each bar in *rects*, displaying its height."""
+    for rect in rects:
+        height = rect.get_height()
+        ax.annotate('{}'.format(height),
+                    xy=(rect.get_x() + rect.get_width() / 2, height),
+                    xytext=(0, 8),  # 3 points vertical offset
+                    textcoords="offset points",
+                    ha='center', va='bottom',fontsize=32)
+
+
+autolabel(rects1)
+autolabel(rects2)
+
+fig.tight_layout()
+plt.ylim(0,12)
+plt.grid(axis='y',linestyle='--',linewidth=4)
+plt.legend(fontsize=35)
+
+rects1[14].set_linewidth(8)
+rects1[14].set_edgecolor('r')
+rects2[17].set_linewidth(8)
+rects2[17].set_edgecolor('r')
+
+plt.show()
